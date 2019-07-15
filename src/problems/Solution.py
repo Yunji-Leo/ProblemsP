@@ -1,15 +1,7 @@
 #!/usr/bin/env python3
 from typing import List
+from ListNode import ListNode
 import math
-
-# Definition for singly-linked list.
-
-
-class ListNode:
-    def __init__(self, x):
-        self.val = x
-        self.next = None
-
 
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
