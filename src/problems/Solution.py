@@ -3,6 +3,7 @@ from typing import List
 from ListNode import ListNode
 import math
 
+
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         check_list = {}
@@ -72,7 +73,7 @@ class Solution:
         if (m + n) % 2 == 0:
             return (self.getKth(nums1, nums2, (m + n) // 2 + 1) + self.getKth(nums1, nums2, (m + n) // 2)) * 0.5
         else:
-            return (self.getKth(nums1, nums2, (m+n)//2+1))*1.0
+            return (self.getKth(nums1, nums2, (m + n) // 2 + 1)) * 1.0
 
     def getKth(self, A: List[int], B: List[int], k: int) -> int:
         m = len(A)
@@ -105,7 +106,7 @@ class Solution:
                 start = i - (tmplen - 1) // 2
                 end = i + tmplen // 2
 
-        return s[start:end+1]
+        return s[start:end + 1]
 
     def expandAroundCenter(self, s: str, left: int, right: int) -> int:
         while left >= 0 and right < len(s):
@@ -126,7 +127,7 @@ class Solution:
         for i in range(start, len(nums)):
             tmplist.append(nums[i])
             self.backtrackSubsets(result, tmplist, nums, i + 1)
-            #tmplist = tmplist[:-1]
+            # tmplist = tmplist[:-1]
             tmplist.pop()
 
     def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
@@ -141,7 +142,7 @@ class Solution:
             if i > start and nums[i] == nums[i - 1]:
                 continue
             tmplist.append(nums[i])
-            self.backtrackSubsetsWithDup(result, tmplist, nums, i+1)
+            self.backtrackSubsetsWithDup(result, tmplist, nums, i + 1)
             tmplist.pop()
 
     def convert(self, s: str, numRows: int) -> str:
@@ -167,7 +168,7 @@ class Solution:
         rev, x = 0, abs(x)
         while x:
             x, mod = divmod(x, 10)
-            rev = rev*10 + mod
+            rev = rev * 10 + mod
         return sign * rev if - pow(2, 31) <= sign * rev <= pow(2, 31) - 1 else 0
 
     def myAtoi(self, str: str) -> int:
@@ -239,3 +240,27 @@ class Solution:
                     first_match and self.isMatch(s[1:], p))
         else:
             return first_match and self.isMatch(s[1:], p[1:])
+
+    def maxProfit(self, k: int, prices: List[int]):
+        if k == 0 or len(prices) == 0:
+            return 0
+        if 2 * k > len(prices):
+            result = 0
+            for i in range(len(prices) - 1):
+                if prices[i + 1] > prices[i]:
+                    result += prices[i + 1] - prices[i]
+            return result
+
+        dp = [[[0 for k in range(2)] for j in range(k + 1)] for i in range(len(prices) + 1)]
+
+        for i in range(1, len(prices) + 1):
+            dp[i][0][1] = max(dp[i - 1][0][1], -prices[i - 1])
+        for i in range(1, k + 1):
+            dp[0][i][1] = -prices[0]
+
+        for i in range(1, len(prices) + 1):
+            for j in range(1, k + 1):
+                dp[i][j][0] = max(dp[i - 1][j][0], dp[i - 1][j - 1][1] + prices[i - 1])
+                dp[i][j][1] = max(dp[i - 1][j][1], dp[i - 1][j][0] - prices[i - 1])
+
+        return dp[len(prices)][k][0]
