@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 from typing import List
 from ListNode import ListNode
+from TreeNode import TreeNode
 import math
+import queue
 
 
 class Solution:
@@ -253,6 +255,8 @@ class Solution:
 
         dp = [[[0 for k in range(2)] for j in range(k + 1)] for i in range(len(prices) + 1)]
 
+        dp[0][0][1] = -2 ** 31
+
         for i in range(1, len(prices) + 1):
             dp[i][0][1] = max(dp[i - 1][0][1], -prices[i - 1])
         for i in range(1, k + 1):
@@ -264,3 +268,64 @@ class Solution:
                 dp[i][j][1] = max(dp[i - 1][j][1], dp[i - 1][j][0] - prices[i - 1])
 
         return dp[len(prices)][k][0]
+
+    def recoverFromPreorder(self, S: str) -> TreeNode:
+        nodeQueue = queue.Queue()
+        depthQueue = queue.Queue()
+        self.generateNodeQueue(S, nodeQueue, depthQueue)
+        if nodeQueue.qsize() == 0:
+            return
+
+        nodeStack = []
+        depthStack = []
+
+        root = nodeQueue.get()
+        depth = depthQueue.get()
+        nodeStack.append(root)
+        depthStack.append(depth)
+
+        while nodeQueue.qsize() > 0:
+            node = nodeQueue.get()
+            depth = depthQueue.get()
+
+            parent = None
+            parentDepth = -1
+            while True:
+                parent = nodeStack.pop()
+                parentDepth = depthStack.pop()
+                if parentDepth == depth -1:
+                    break
+            if parent.left == None:
+                parent.left = node
+                nodeStack.append(parent)
+                depthStack.append(parentDepth)
+            else:
+                parent.right = node
+            nodeStack.append(node)
+            depthStack.append(depth)
+
+        return root
+
+    def generateNodeQueue(self, S: str, nodeQueue: queue.Queue, depthQueue: queue.Queue):
+        if len(S) == 0:
+            return
+        isDigit = False
+        depth = 0
+        value = 0
+        for i in range(len(S)):
+            if '-' != S[i]:
+                if isDigit:
+                    value = value*10 + (ord(S[i]) - ord('0'))
+                else:
+                    isDigit = True
+                    value = ord(S[i]) - ord('0')
+            else:
+                if not isDigit:
+                    depth = depth + 1
+                else:
+                    nodeQueue.put(TreeNode(value))
+                    depthQueue.put(depth)
+                    isDigit = False
+                    depth = 1
+        nodeQueue.put(TreeNode(value))
+        depthQueue.put(depth)
