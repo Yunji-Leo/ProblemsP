@@ -347,7 +347,7 @@ class Solution:
         C = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"]
         X = ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"]
         I = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"]
-        return M[num//1000] + C[(num%1000)//100] + X[(num%100)//10] + I[num%10]
+        return M[num // 1000] + C[(num % 1000) // 100] + X[(num % 100) // 10] + I[num % 10]
 
     def romanToInt(self, s: str) -> int:
         roman = {
@@ -360,9 +360,29 @@ class Solution:
             'I': 1,
         }
         result = 0
-        for i in range(len(s)-1):
-            if roman[s[i]] < roman[s[i+1]]:
+        for i in range(len(s) - 1):
+            if roman[s[i]] < roman[s[i + 1]]:
                 result = result - roman[s[i]]
             else:
                 result = result + roman[s[i]]
         return result + roman[s[-1]]
+
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        if len(strs) == 0:
+            return ""
+        return self.longestCommonPrefixDC(strs, 0, len(strs) - 1)
+
+    def longestCommonPrefixDC(self, strs: List[str], l: int, r: int) -> str:
+        if l == r:
+            return strs[l]
+        mid = (l + r) // 2
+        left = self.longestCommonPrefixDC(strs, l, mid)
+        right = self.longestCommonPrefixDC(strs, mid + 1, r)
+        return self.commonPrefix(left, right)
+
+    def commonPrefix(self, left: str, right: str) -> str:
+        minLength = min(len(left), len(right))
+        for i in range(minLength):
+            if left[i] != right[i]:
+                return left[:i]
+        return left[:minLength]
