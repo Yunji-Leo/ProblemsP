@@ -348,3 +348,21 @@ class Solution:
         X = ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"]
         I = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"]
         return M[num//1000] + C[(num%1000)//100] + X[(num%100)//10] + I[num%10]
+
+    def romanToInt(self, s: str) -> int:
+        roman = {
+            'M': 1000,
+            'D': 500,
+            'C': 100,
+            'L': 50,
+            'X': 10,
+            'V': 5,
+            'I': 1,
+        }
+        result = 0
+        for i in range(len(s)-1):
+            if roman[s[i]] < roman[s[i+1]]:
+                result = result - roman[s[i]]
+            else:
+                result = result + roman[s[i]]
+        return result + roman[s[-1]]
