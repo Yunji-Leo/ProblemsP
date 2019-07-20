@@ -408,5 +408,24 @@ class Solution:
                             right = right - 1
                         left = left + 1
                         right = right - 1
+        return result
 
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        nums.sort()
+        result = 2**31-1
+        distance = 2**31-1
+        for i in range(len(nums)-2):
+            left = i+1
+            right = len(nums)-1
+            while left < right:
+                sum = nums[i]+nums[left]+nums[right]
+                if abs(sum-target)<distance:
+                    result = sum
+                    distance = abs(sum-target)
+                if sum == target:
+                    return sum
+                if sum > target:
+                    right = right-1
+                else:
+                    left = left+1
         return result
