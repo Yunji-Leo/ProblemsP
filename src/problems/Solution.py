@@ -412,20 +412,47 @@ class Solution:
 
     def threeSumClosest(self, nums: List[int], target: int) -> int:
         nums.sort()
-        result = 2**31-1
-        distance = 2**31-1
-        for i in range(len(nums)-2):
-            left = i+1
-            right = len(nums)-1
+        result = 2 ** 31 - 1
+        distance = 2 ** 31 - 1
+        for i in range(len(nums) - 2):
+            left = i + 1
+            right = len(nums) - 1
             while left < right:
-                sum = nums[i]+nums[left]+nums[right]
-                if abs(sum-target)<distance:
+                sum = nums[i] + nums[left] + nums[right]
+                if abs(sum - target) < distance:
                     result = sum
-                    distance = abs(sum-target)
+                    distance = abs(sum - target)
                 if sum == target:
                     return sum
                 if sum > target:
-                    right = right-1
+                    right = right - 1
                 else:
-                    left = left+1
+                    left = left + 1
         return result
+
+    def letterCombinations(self, digits: str) -> List[str]:
+        phone = {
+            '2': ["a", "b", "c"],
+            '3': ["d", "e", "f"],
+            '4': ["g", "h", "i"],
+            '5': ["j", "k", "l"],
+            '6': ["m", "n", "o"],
+            '7': ["p", "q", "r", "s"],
+            '8': ["t", "u", "v"],
+            '9': ["w", "x", "y", "z"],
+        }
+
+        result = []
+        if len(digits) == 0:
+            return result
+        self.letterCombinationsRecursive(result, phone, digits, 0, "")
+        return result
+
+    def letterCombinationsRecursive(self, result: List[str], phone: {}, digits: str, pos: int, temp: str):
+        if pos == len(digits):
+            result.append(temp)
+            return
+        for i in range(len(phone[digits[pos]])):
+            temp = temp + phone[digits[pos]][i]
+            self.letterCombinationsRecursive(result, phone, digits, pos+1, temp)
+            temp = temp[:-1]
