@@ -481,3 +481,16 @@ class Solution:
                                 left = left + 1
                                 right = right - 1
         return result
+
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        dummy = ListNode(0)
+        dummy.next = head
+        first = dummy
+        for i in range(n):
+            first = first.next
+        second = dummy
+        while first.next != None:
+            first = first.next
+            second = second.next
+        second.next = second.next.next
+        return dummy.next
