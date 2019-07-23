@@ -529,14 +529,30 @@ class Solution:
 
     def generateParenthesis(self, n: int) -> List[str]:
         result = []
-        def backtrack(S = '', left = 0, right = 0):
-            if len(S) == 2*n:
+
+        def backtrack(S='', left=0, right=0):
+            if len(S) == 2 * n:
                 result.append(S)
                 return
             if left < n:
-                backtrack(S+'(', left+1, right)
+                backtrack(S + '(', left + 1, right)
             if right < left:
-                backtrack(S+')', left, right+1)
+                backtrack(S + ')', left, right + 1)
 
         backtrack()
         return result
+
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        head = point = ListNode(0)
+        q = queue.PriorityQueue()
+        for l in lists:
+            if l:
+                q.put(l)
+        while not q.empty():
+            node = q.get()
+            point.next = node#ListNode(node.val)
+            point = point.next
+            node = node.next
+            if node:
+                q.put(node)
+        return head.next
