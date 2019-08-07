@@ -556,3 +556,15 @@ class Solution:
             if node:
                 q.put(node)
         return head.next
+
+    def swapPairs(self, head: ListNode) -> ListNode:
+        dummy = prev = ListNode(0)
+        prev.next = head
+        while prev.next is not None and prev.next.next is not None:
+            first = prev.next
+            second = prev.next.next
+            prev.next = second
+            first.next = second.next
+            second.next = first
+            prev = first
+        return dummy.next
