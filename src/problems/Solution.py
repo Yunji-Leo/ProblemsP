@@ -568,3 +568,21 @@ class Solution:
             second.next = first
             prev = first
         return dummy.next
+
+    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
+        curr = head
+        count = 0
+        while curr is not None and count < k:
+            curr = curr.next
+            count = count + 1
+        if count == k:
+            curr = self.reverseKGroup(curr, k)
+            for i in range(k):
+                tmp = head.next
+                head.next = curr
+                curr = head
+                head = tmp
+            head = curr
+        return head
+
+
