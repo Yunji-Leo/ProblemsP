@@ -550,7 +550,7 @@ class Solution:
                 q.put(l)
         while not q.empty():
             node = q.get()
-            point.next = node#ListNode(node.val)
+            point.next = node  # ListNode(node.val)
             point = point.next
             node = node.next
             if node:
@@ -585,4 +585,12 @@ class Solution:
             head = curr
         return head
 
-
+    def divide(self, dividend: int, divisor: int) -> int:
+        if dividend == -pow(2, 31) and divisor == -1:
+            return pow(2, 31) - 1
+        a, b, res = abs(dividend), abs(divisor), 0
+        for x in range(32)[::-1]:
+            if (a >> x) - b >= 0:
+                res += 1 << x
+                a -= b << x
+        return res if (dividend > 0) == (divisor > 0) else -res
