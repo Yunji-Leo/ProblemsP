@@ -1,7 +1,7 @@
 from unittest import TestCase
 from Solution import Solution
 from ListNode import ListNode
-from AppKit import NSWorkspace
+#from AppKit import NSWorkspace
 
 
 class TestSolution(TestCase):
@@ -30,4 +30,7 @@ class TestSolution(TestCase):
 
         self.assertTrue(self.s.isPalindrome(121))
         self.s.recoverFromPreorder("1-2--3--4-5--6--7")
+
+    def test_findSubString(self):
+        self.s.findSubstring("barfoothefoobarman", ["foo", "bar"])
 

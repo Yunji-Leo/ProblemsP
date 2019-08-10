@@ -594,3 +594,61 @@ class Solution:
                 res += 1 << x
                 a -= b << x
         return res if (dividend > 0) == (divisor > 0) else -res
+
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        result = []
+        if len(words) == 0:
+            return result
+
+        wordLength = len(words[0])
+        hashmap = {}
+        for w in words:
+            hashmap[w] = hashmap[w] + 1 if w in hashmap else 1
+
+        for i in range(len(s)):
+            copymap = hashmap.copy() #shallow copy
+            found = True
+            for j in range(len(words)):
+                end = (j+1)*wordLength + i
+                start = end - wordLength
+                if end <= len(s):
+                    sub = s[start: end]
+                    if sub in copymap and copymap[sub] > 0:
+                        copymap[sub] = copymap[sub] - 1
+                    else:
+                        found = False
+                        break
+                else:
+                    return result
+            if found:
+                result.append(i)
+
+        return result
+
+    def findSubstring2(self, s: str, words: List[str]) -> List[int]:
+        if not s or not words or len(s) < len(words) * len(words[0]):
+            return []
+        w = {}
+        for word in words:
+            w[word] = w.get(word, 0) + 1
+        ans = []
+        length = len(words[0])
+        for start in range(length):
+            d = {}
+            for i in range(start, len(s), length):
+                word = s[i:i + length]
+                if word not in w:
+                    start = i + length
+                    d = {}
+                    continue
+                d[word] = d.get(word, 0) + 1
+                while d[word] > w[word]:
+                    curr = s[start:start + length]
+                    start += length
+                    d[curr] -= 1
+                if d == w:
+                    ans.append(start)
+        return ans
+
+
+
