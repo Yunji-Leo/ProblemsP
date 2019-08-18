@@ -606,10 +606,10 @@ class Solution:
             hashmap[w] = hashmap[w] + 1 if w in hashmap else 1
 
         for i in range(len(s)):
-            copymap = hashmap.copy() #shallow copy
+            copymap = hashmap.copy()  # shallow copy
             found = True
             for j in range(len(words)):
-                end = (j+1)*wordLength + i
+                end = (j + 1) * wordLength + i
                 start = end - wordLength
                 if end <= len(s):
                     sub = s[start: end]
@@ -650,5 +650,29 @@ class Solution:
                     ans.append(start)
         return ans
 
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        i = len(nums) - 2
+        while i >= 0 and nums[i + 1] <= nums[i]:
+            i = i - 1
+        if i >= 0:
+            j = len(nums) - 1
+            while j >= 0 and nums[j] <= nums[i]:
+                j = j - 1
+            self.swap(nums, i, j)
+        self.reverse(nums, i + 1)
 
+    def reverse(self, nums: List[int], start: int):
+        i = start
+        j = len(nums) - 1
+        while i < j:
+            swap(nums, i, j)
+            i = i + 1
+            j = j - 1
 
+    def swap(self, nums: List[int], i: int, j: int):
+        temp = nums[i]
+        nums[i] = nums[j]
+        nums[j] = temp
